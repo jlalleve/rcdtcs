@@ -1,6 +1,8 @@
 
 # Rcdtcs Pre-Release
 
+![Alt text](/RcdtcsScreenshot.jpg?raw=true "Rcdtcs Unity Demo")
+
 ## Origin of the software and disclaimer :
 
 Rcdtcs is an experimental C# port of the Recast & Detour libraries, originally written by Mikko Mononen. The original author is not associated with this port.
