@@ -222,7 +222,7 @@ public class RcdtcsSampleSoloMeshComponent : MonoBehaviour {
 		if (mainClick || altClick){
 
 			//Don't raycast through new UI stuff
-			if (EventSystemManager.currentSystem.IsPointerOverEventSystemObject()){
+			if (EventSystem.current.IsPointerOverGameObject()){
 				return;
 			}
 

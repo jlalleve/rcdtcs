@@ -1,5 +1,5 @@
 
-# Rcdtcs Pre-Release
+# Rcdtcs Pre-Release 2
 
 ![Alt text](/RcdtcsScreenshot.jpg?raw=true "Rcdtcs Unity Demo")
 
@@ -27,7 +27,7 @@ Although Unity includes its own version of the Recast/Detour library, this imple
 
 The Unity code has no reliance on Pro features and there is no Editor-only code so it's fully embeddable and Unity Free compatible.
 
-**Please note that for this pre-release, the Unity code is only compatible with the public beta version of Unity 4.6 b17**. This is due to reliance on Unity's new GUI system, which should soon be part of the main version of the Editor.
+**Please note that for this pre-release, the Unity code is only compatible with the public beta version of Unity 4.6 b20**. This is due to reliance on Unity's new GUI system, which should soon be part of the main version of the Editor.
 
 ## Porting scope
 
@@ -48,7 +48,7 @@ Additional supported features not shown in the demo include:
 
 ## Running the demo
 
-You need the free or pro version of **Unity 4.6 Beta 17**.
+You need the free or pro version of **Unity 4.6 Beta 20**.
 
 Open the repository's folder as a Unity Project, then open the following scene :
 
