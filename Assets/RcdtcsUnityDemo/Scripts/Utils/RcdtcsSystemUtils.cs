@@ -214,7 +214,105 @@ public static partial class RcdtcsUnityUtils{
 			m_vertCount += mesh.vertexCount;
 			m_triCount += mesh.triangles.Length / 3;
 		}
-		
+
+        public void AddTerrain(Terrain terrain)
+        {
+            //Terrain Data
+            int terrainWidth = terrain.terrainData.heightmapWidth;
+            int terrainHeight = terrain.terrainData.heightmapHeight;
+            float[,] terrainData = terrain.terrainData.GetHeights(0, 0, terrainWidth, terrainHeight);
+
+            Vector3 meshScale = new Vector3(terrain.terrainData.size.x / (terrainWidth - 1), terrain.terrainData.size.y, terrain.terrainData.size.z / (terrainHeight - 1));
+            terrainWidth = (terrainWidth - 1);
+            terrainHeight = (terrainHeight - 1);
+
+            //Setup m_verts array size
+            int vertStart = 0;
+            int prevVertCount = 0;
+            int newVertCount = terrainWidth * terrainHeight;
+
+            int minTri = 0;
+            int maxTri = int.MaxValue;
+
+            if (m_verts != null)
+            {
+                vertStart = m_verts.Length;
+                prevVertCount = vertStart / 3;
+                m_verts = ResizeStaticArray(m_verts, typeof(float), vertStart + newVertCount * 3) as float[];
+            }
+            else
+            {
+                m_verts = new float[newVertCount * 3];
+            }
+
+            // Build vertice array
+            Vector3[] vertices = new Vector3[terrainWidth * terrainHeight];
+
+            for (int y = 0; y < terrainHeight; y++)
+            {
+                for (int x = 0; x < terrainWidth; x++)
+                {
+                    vertices[y * terrainWidth + x] = Vector3.Scale(meshScale, new Vector3(x, terrainData[y, x], y));
+                }
+            }
+
+            int index = 0;
+
+            // Build triangle indices: 3 indices into vertex array for each triangle
+            int[] triangles = new int[(terrainWidth - 1) * (terrainHeight - 1) * 6];
+
+            for (int y = 0; y < terrainHeight - 1; y++)
+            {
+                for (int x = 0; x < terrainWidth - 1; x++)
+                {
+                    // For each grid cell output two triangles
+                    triangles[index++] = (y * terrainWidth) + x;
+                    triangles[index++] = ((y + 1) * terrainWidth) + x;
+                    triangles[index++] = (y * terrainWidth) + x + 1;
+
+                    triangles[index++] = ((y + 1) * terrainWidth) + x;
+                    triangles[index++] = ((y + 1) * terrainWidth) + x + 1;
+                    triangles[index++] = (y * terrainWidth) + x + 1;
+                }
+            }
+
+            //Store new triangles into m_tris
+            int triStart = 0;
+            int newTriCount = triangles.Length;
+            if (m_tris != null)
+            {
+                triStart = m_tris.Length;
+                m_tris = ResizeStaticArray(m_tris, typeof(int), triStart + newTriCount) as int[];
+                for (int i = 0; i < newTriCount; ++i)
+                {
+                    m_tris[i + triStart] = prevVertCount + triangles[i];
+                }
+            }
+            else
+            {
+                m_tris = triangles;
+            }
+
+            for (int i = 0; i < m_tris.Length; ++i)
+            {
+                minTri = Math.Max(m_tris[i], minTri);
+                maxTri = Math.Min(m_tris[i], maxTri);
+            }
+
+            //Store vertices into m_verts
+            for (int i = 0; i < newVertCount; ++i)
+            {
+                int v = vertStart + i * 3;
+                m_verts[v + 0] = vertices[i].x;
+                m_verts[v + 1] = vertices[i].y;
+                m_verts[v + 2] = vertices[i].z;
+            }
+
+            //Update vert/tri counts
+            m_vertCount += vertices.Length;
+            m_triCount += triangles.Length / 3;
+        }
+
 		public bool ComputeSystem(byte[] tileRawData, int start) {
 			
 			m_ctx.enableLog(true);
