@@ -218,11 +218,11 @@ public static partial class RcdtcsUnityUtils{
         public void AddTerrain(Terrain terrain)
         {
             //Terrain Data
-            var terrainWidth = terrain.terrainData.heightmapWidth;
-            var terrainHeight = terrain.terrainData.heightmapHeight;
-            var terrainData = terrain.terrainData.GetHeights(0, 0, terrainWidth, terrainHeight);
+            int terrainWidth = terrain.terrainData.heightmapWidth;
+            int terrainHeight = terrain.terrainData.heightmapHeight;
+            float[,] terrainData = terrain.terrainData.GetHeights(0, 0, terrainWidth, terrainHeight);
 
-            var meshScale = new Vector3(terrain.terrainData.size.x / (terrainWidth - 1), terrain.terrainData.size.y, terrain.terrainData.size.z / (terrainHeight - 1));
+            Vector3 meshScale = new Vector3(terrain.terrainData.size.x / (terrainWidth - 1), terrain.terrainData.size.y, terrain.terrainData.size.z / (terrainHeight - 1));
             terrainWidth = (terrainWidth - 1);
             terrainHeight = (terrainHeight - 1);
 
@@ -246,22 +246,20 @@ public static partial class RcdtcsUnityUtils{
             }
 
             // Build vertice array
-            var vertices = new Vector3[terrainWidth * terrainHeight];
+            Vector3[] vertices = new Vector3[terrainWidth * terrainHeight];
 
-            for (var y = 0; y < terrainHeight; y++)
+            for (int y = 0; y < terrainHeight; y++)
             {
-                for (var x = 0; x < terrainWidth; x++)
+                for (int x = 0; x < terrainWidth; x++)
                 {
-
                     vertices[y * terrainWidth + x] = Vector3.Scale(meshScale, new Vector3(x, terrainData[y, x], y));
-
                 }
             }
 
-            var index = 0;
+            int index = 0;
 
             // Build triangle indices: 3 indices into vertex array for each triangle
-            var triangles = new int[(terrainWidth - 1) * (terrainHeight - 1) * 6];
+            int[] triangles = new int[(terrainWidth - 1) * (terrainHeight - 1) * 6];
 
             for (int y = 0; y < terrainHeight - 1; y++)
             {
