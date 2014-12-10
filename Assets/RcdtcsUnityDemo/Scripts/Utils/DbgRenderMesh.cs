@@ -261,7 +261,7 @@ public class DbgRenderMesh{
         }
     }
 
-    public void CreateGameObject(string name, Material material) {
+	public GameObject CreateGameObject(string name, Material material) {
 		if (m_GameObject == null){
 			GameObject gao = new GameObject(name);
 			gao.transform.position = Vector3.zero;
@@ -271,6 +271,20 @@ public class DbgRenderMesh{
 			m_GameObject.name = name;
 		}
 		m_GameObject.renderer.material = material;
+		return m_GameObject;
+	}
+	
+	public void DestroyGameObject() {
+		if (m_GameObject != null) {
+			Clear();
+			Rebuild();
+			
+			GameObject.Destroy(m_GameObject);
+			m_MeshFilter = null;
+			m_MeshRenderer = null;
+			m_Mesh = null;
+			m_GameObject = null;
+		}
 	}
 	
 	private void Setup(GameObject target){
